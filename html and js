@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>TinkerTV Admin</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Channel</h1>
+        </div>
+    </div>
+    <div class="row" style="background-color: #F7F7F9;">
+        <div class="container" style="padding-top: 20px;">
+            <form>
+                <div class="form-group col-md-3">
+                    <label for="broadcaster">Broadcaster</label>
+                    <select class="form-control" id="broadcaster">
+                        <option> -- select an option -- </option>
+                        <#list broadcasters as broadcaster>
+                        <option>${broadcaster}</option>
+                    </#list>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="genre">Genre</label>
+                    <select class="form-control" id="genre">
+                        <option> -- select an option -- </option>
+                        <#list genres as genre>
+                        <option>${genre}</option>
+                    </#list>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="language">Language</label>
+                    <select class="form-control" id="language">
+                        <option> -- select an option -- </option>
+                        <#list languages as language>
+                        <option>${language}</option>
+                    </#list>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+
+                    <label for="bouquet">Bouquet</label>
+                    <select class="form-control" id="bouquet">
+                        <option> -- select an option -- </option>
+                        <option>BOUQUET-1</option>
+                        <option>BOUQUET-2</option>
+                        <option>BOUQUET-3</option>
+                        <option>BOUQUET-4</option>
+                        <option>HD BOUQUET 1 - BASIC INFOTAINMENT HIGH DEFINITION (TAMIL) PACK</option>
+                        <option>HD BOUQUET 2 - BASIC INFOTAINMENT HIGH DEFINITION  PACK</option>
+                        <option>HD BOUQUET 3 -  INFOTAINMENT + SPORTS HIGH DEFINITION  PACK</option>
+                        <option>HD BOUQUET 4 -  INFOTAINMENT  HIGH DEFINITION  PACK</option>
+                        <option>HD BOUQUET 5 -  KIDS INFOTAINMENT  HIGH DEFINITION  PACK</option>
+                        <option>SD BOUQUET 1 - BASIC INFOTAINMENT PACK</option>
+                        <option>SD BOUQUET 2 - INFOTAINMENT  SPORTS PACK</option>
+                        <option>SD BOUQUET 3 - INFOTAINMENT PACK</option>
+                        <option>SD BOUQUET 4 - KIDS INFOTAINMENT PACK </option>
+                        <option>SD BOUQUET 5 - BASIC INFOTAINMENT (TAMIL) PACK</option>
+                        <option>SD BOUQUET 6 - INFOTAINMENT + SPORTS  (TAMIL) PACK</option>
+                        <option>SD BOUQUET 7 INFOTAINMENT (TAMIL) PACK</option>
+                        <option>SD BOUQUET 8 KIDS INFOTAINMENT (TAMIL) PACK</option>
+                        <option>HD Bouquet</option>
+                        <option>Hindi Entertainment  Bouquet</option>
+                        <option>Kids Bouquet</option>
+                        <option>Universal Bouquet</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="hd">HD</label>
+                    <select class="form-control" id="hd">
+                        <option> -- select an option -- </option>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-1">
+                    <button type="button" class="btn btn-success" id="send" style="width: 100%">Send</button>
+                </div>
+            </form>
+            <br>
+            <br>
+            <form>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Channel</th>
+                        <th>Bouquet</th>
+                        <th>HD</th>
+                        <th>Genre</th>
+                    </tr>
+                    </thead>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+        $('#send').click(function(){
+            var payload = {
+                Broadcaster:$('#broadcaster').val(),
+                Genre:$('#genre').val(),
+                hd:$('#hd').val(),
+            };
+            $.ajax({
+                url: "/channel/getChannelsbyfilter",
+                data: payload,
+                context: document.body,
+                success: function(users) {
+                    userstable.empty();
+                    for (i = 0; i < users.length; ++i) {
+                        userstable.append(getRowText(users[i]));
+                    }
+                },
+                error: function(){
+                    console.log("failed!");
+                }
+            });
+        function getRowText(user){
+            return '<tr><td>'+user.id+'</td><td>'+user.email+'</td><td>'+user.username+'</td><td>'+user.lastName+'</td><td><button type="button" class="btn btn-success addbtn" value="'+user.id+'">ADD</button></td></tr>';
+        }
+        });
+    </script>
+</body>
+</html>
